@@ -17,7 +17,8 @@ public class SleepTrackerApp {
             new MaxDurationFinder(),
             new AvgDurationFinder(),
             new BadSessionsCounter(),
-            new SleeplessFinder()
+            new SleeplessFinder(),
+            new ChronoTyper()
     );
 
     public static void main(String[] args) {

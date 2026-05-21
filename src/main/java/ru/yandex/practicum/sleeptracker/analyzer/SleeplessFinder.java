@@ -15,13 +15,12 @@ public class SleeplessFinder implements Function<List<SleepingSession>, SleepAna
 
     private static final LocalTime NIGHT_FINISH = LocalTime.of(6, 0);
     private static final LocalTime NOON = LocalTime.of(12, 0);
+    private static final LocalTime MIDNIGHT = LocalTime.of(0, 0);
 
     @Override
     public SleepAnalysisResult apply(List<SleepingSession> sleepingSessions) {
         int nightWithoutSleeping = getTotalNights(sleepingSessions) - getSleepNights(sleepingSessions);
 
-        //return new SleepAnalysisResult("Всего ночей", getTotalNights(sleepingSessions));
-        //return new SleepAnalysisResult("Ночей со сном", getSleepNights(sleepingSessions));
         return new SleepAnalysisResult("Выявлено бессонных ночей",  nightWithoutSleeping);
     }
 
@@ -57,8 +56,8 @@ public class SleeplessFinder implements Function<List<SleepingSession>, SleepAna
         LocalTime startTime = start.toLocalTime();
         LocalTime finishTime = finish.toLocalTime();
 
-        if (start.toLocalDate().isBefore(finish.toLocalDate())) return true;
-        if (startTime.isAfter(NOON) && finishTime.isBefore(NIGHT_FINISH)) return true;
+        if (finish.toLocalDate().isAfter(start.toLocalDate())) return true;
+        if (startTime.isAfter(MIDNIGHT) && finishTime.isBefore(NIGHT_FINISH)) return true;
         if (startTime.isBefore(NIGHT_FINISH)) return true;
 
         return false;

@@ -19,7 +19,7 @@ public class MaxDurationFinder implements Function<List<SleepingSession>, SleepA
                 .map(Duration::toMinutes)
                 .max(Comparator.naturalOrder());
 
-        Long result = maxDuration.orElse(null);
+        Long result = maxDuration.orElse(0L);
         return new SleepAnalysisResult("Максимальная продолжительность сна в минутах", result);
     }
 }

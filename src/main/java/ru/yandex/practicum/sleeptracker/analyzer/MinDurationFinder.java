@@ -19,7 +19,7 @@ public class MinDurationFinder implements Function<List<SleepingSession>, SleepA
                 .map(Duration::toMinutes)
                 .min(Comparator.naturalOrder());
 
-        Long result = minDuration.orElse(null);
+        Long result = minDuration.orElse(0L);
         return new SleepAnalysisResult("Минимальная продолжительность сна в минутах", result);
     }
 }

@@ -20,9 +20,6 @@ public class SleeplessFinder implements Function<List<SleepingSession>, SleepAna
     public SleepAnalysisResult apply(List<SleepingSession> sleepingSessions) {
         int nightWithoutSleeping = getTotalNights(sleepingSessions) - getSleepNights(sleepingSessions);
 
-        System.out.println("Всего ночей: " + getTotalNights(sleepingSessions));
-        System.out.println("Ночи со сном: " + getSleepNights(sleepingSessions));
-
         return new SleepAnalysisResult("Выявлено бессонных ночей",  nightWithoutSleeping);
     }
 

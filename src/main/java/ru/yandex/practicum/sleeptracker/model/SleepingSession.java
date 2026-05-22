@@ -1,6 +1,7 @@
 package ru.yandex.practicum.sleeptracker.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class SleepingSession {
     private final LocalDateTime start;
@@ -32,5 +33,18 @@ public class SleepingSession {
 
     public SleepQuality getQuality() {
         return quality;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        SleepingSession that = (SleepingSession) o;
+        return Objects.equals(start.toLocalDate(), that.start.toLocalDate())
+                && Objects.equals(finish.toLocalDate(), that.finish.toLocalDate());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(start.toLocalDate(), finish.toLocalDate());
     }
 }

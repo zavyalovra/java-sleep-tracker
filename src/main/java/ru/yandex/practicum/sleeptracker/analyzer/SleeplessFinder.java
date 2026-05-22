@@ -15,11 +15,13 @@ public class SleeplessFinder implements Function<List<SleepingSession>, SleepAna
 
     private static final LocalTime NIGHT_FINISH = LocalTime.of(6, 0);
     private static final LocalTime NOON = LocalTime.of(12, 0);
-    private static final LocalTime MIDNIGHT = LocalTime.of(0, 0);
 
     @Override
     public SleepAnalysisResult apply(List<SleepingSession> sleepingSessions) {
         int nightWithoutSleeping = getTotalNights(sleepingSessions) - getSleepNights(sleepingSessions);
+
+        System.out.println("Всего ночей: " + getTotalNights(sleepingSessions));
+        System.out.println("Ночи со сном: " + getSleepNights(sleepingSessions));
 
         return new SleepAnalysisResult("Выявлено бессонных ночей",  nightWithoutSleeping);
     }
@@ -34,15 +36,17 @@ public class SleeplessFinder implements Function<List<SleepingSession>, SleepAna
 
         LocalDate lastNight = sessions.getLast().getFinish().toLocalDate();
 
-        if (lastNight.isBefore(firstNight)) {
-            return 0;
-        }
-
-        return Period.between(firstNight, lastNight.plusDays(1)).getDays();
+        Period period = Period.between(firstNight, lastNight.plusDays(1));
+        return period.getDays() + period.getMonths() * 31;
     }
 
     private static int getSleepNights(List<SleepingSession> sessions) {
-
+        /*
+        * В терминальной операции стрима собираем в коллекцию Set - это автоматически удаляет дубликаты
+        * ночей, возникающие в результате наличия нескольких сессий сна за одну ночь.
+        * Сессии сна считаются одинаковыми, если у них совпадает только дата начала сессии и ее конца.
+        * Реализовано за счет переопределения методов equals/hashCode в классе SleepingSession.
+        * */
         return sessions.stream()
                 .filter(SleeplessFinder::isSleepConditions)
                 .collect(Collectors.toSet()).size();
@@ -53,13 +57,7 @@ public class SleeplessFinder implements Function<List<SleepingSession>, SleepAna
         LocalDateTime start = session.getStart();
         LocalDateTime finish = session.getFinish();
 
-        LocalTime startTime = start.toLocalTime();
-        LocalTime finishTime = finish.toLocalTime();
-
         if (finish.toLocalDate().isAfter(start.toLocalDate())) return true;
-        if (startTime.isAfter(MIDNIGHT) && finishTime.isBefore(NIGHT_FINISH)) return true;
-        if (startTime.isBefore(NIGHT_FINISH)) return true;
-
-        return false;
+        return start.toLocalTime().isBefore(NIGHT_FINISH);
     }
 }

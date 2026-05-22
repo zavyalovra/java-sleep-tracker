@@ -92,7 +92,7 @@ public class SleepTrackerAppTest {
     @Test
     void shouldReturnAvgSessionsDuration() {
         AvgDurationFinder avgDurationFinder = new AvgDurationFinder();
-        assertEquals("345,38", avgDurationFinder.apply(sessions).getResult());
+        assertEquals("345.38", avgDurationFinder.apply(sessions).getResult());
     }
 
     @Test
@@ -100,7 +100,7 @@ public class SleepTrackerAppTest {
         AvgDurationFinder avgDurationFinder = new AvgDurationFinder();
         List<SleepingSession> modifiableSessions = new ArrayList<>(sessions);
         modifiableSessions.clear();
-        assertEquals("0,00", avgDurationFinder.apply(modifiableSessions).getResult());
+        assertEquals("0.00", avgDurationFinder.apply(modifiableSessions).getResult());
     }
 
     @Test
@@ -123,6 +123,7 @@ public class SleepTrackerAppTest {
     * Бессонные ночи
     * Проверка стандартного лога задания
     * */
+
     @Test
     void shouldBeReturn20() {
         SleeplessFinder sleeplessFinder  = new SleeplessFinder();
@@ -133,6 +134,7 @@ public class SleepTrackerAppTest {
      * Убираем ночи без описания (часть бессонных ночей)
      * за счет сокращения интервала логирования до 12.10.25
      * */
+
     @Test
     void shouldBeReturn2() {
         SleeplessFinder sleeplessFinder  = new SleeplessFinder();
@@ -147,6 +149,7 @@ public class SleepTrackerAppTest {
      * Бессонные ночи
      * Проверяем функцию на работу с пустым списком
      * */
+
     @Test
     void shouldBeReturn0() {
         SleeplessFinder sleeplessFinder  = new SleeplessFinder();
@@ -160,6 +163,7 @@ public class SleepTrackerAppTest {
      * Проверяем функцию на учет ночей,
      * когда несколько сессий сна в пределах одной ночи
      * */
+
     @Test
     void shouldBeReturn16() {
         SleeplessFinder sleeplessFinder  = new SleeplessFinder();
@@ -203,6 +207,7 @@ public class SleepTrackerAppTest {
      * Проверяем функцию на работу с переходом даты через
      * границу между двух месяцев
      * */
+
     @Test
     void shouldBeReturn1() {
         SleeplessFinder sleeplessFinder  = new SleeplessFinder();
@@ -239,6 +244,7 @@ public class SleepTrackerAppTest {
     * Алгоритм классификации пользователя
     * Работа с логом задания, должен вернуть Dove
     * */
+
     @Test
     void shouldBeReturnCorrectUserType() {
         ChronoTyper chronoTyper  = new ChronoTyper();
@@ -248,6 +254,7 @@ public class SleepTrackerAppTest {
      * Алгоритм классификации пользователя
      * Модифицированный лог для результата: OWL
      * */
+
     @Test
     void shouldBeReturnOWL() {
         ChronoTyper chronoTyper  = new ChronoTyper();
@@ -284,6 +291,7 @@ public class SleepTrackerAppTest {
      * Алгоритм классификации пользователя
      * Модифицированный лог для результата: LARK
      * */
+
     @Test
     void shouldBeReturnLARK() {
         ChronoTyper chronoTyper  = new ChronoTyper();
@@ -322,6 +330,7 @@ public class SleepTrackerAppTest {
      * исходные данные предусматривают одинаковое количество сессий типа OWL и LARK,
      * в этом случае метод должен возвращать Dove
      * */
+
     @Test
     void shouldBeReturnDOVE() {
         ChronoTyper chronoTyper  = new ChronoTyper();

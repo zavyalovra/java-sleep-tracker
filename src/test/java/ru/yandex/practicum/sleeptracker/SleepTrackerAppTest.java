@@ -92,7 +92,7 @@ public class SleepTrackerAppTest {
     @Test
     void shouldReturnAvgSessionsDuration() {
         AvgDurationFinder avgDurationFinder = new AvgDurationFinder();
-        assertEquals("345.38", avgDurationFinder.apply(sessions).getResult());
+        assertEquals(345.38, avgDurationFinder.apply(sessions).getResult());
     }
 
     @Test
@@ -100,7 +100,7 @@ public class SleepTrackerAppTest {
         AvgDurationFinder avgDurationFinder = new AvgDurationFinder();
         List<SleepingSession> modifiableSessions = new ArrayList<>(sessions);
         modifiableSessions.clear();
-        assertEquals("0.00", avgDurationFinder.apply(modifiableSessions).getResult());
+        assertEquals(0.00, avgDurationFinder.apply(modifiableSessions).getResult());
     }
 
     @Test

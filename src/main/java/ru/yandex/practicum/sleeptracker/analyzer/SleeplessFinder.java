@@ -6,7 +6,6 @@ import ru.yandex.practicum.sleeptracker.util.SleepAnalysisResult;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Period;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -33,8 +32,8 @@ public class SleeplessFinder implements Function<List<SleepingSession>, SleepAna
 
         LocalDate lastNight = sessions.getLast().getFinish().toLocalDate();
 
-        Period period = Period.between(firstNight, lastNight.plusDays(1));
-        return period.getDays() + period.getMonths() * 31;
+        long period = lastNight.plusDays(1).toEpochDay() - firstNight.toEpochDay();
+        return (int) period;
     }
 
     private static int getSleepNights(List<SleepingSession> sessions) {

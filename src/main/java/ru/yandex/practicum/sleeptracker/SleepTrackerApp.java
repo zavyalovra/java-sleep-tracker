@@ -7,6 +7,7 @@ import ru.yandex.practicum.sleeptracker.model.SleepingSession;
 import java.io.IOException;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.function.Function;
 
 public class SleepTrackerApp {
@@ -33,7 +34,7 @@ public class SleepTrackerApp {
 
         } catch (IOException e) {
             System.out.println("Ошибка загрузки сессий сна: " + e.getMessage());
-        } catch (IllegalArgumentException | DateTimeParseException e) {
+        } catch (IllegalArgumentException | DateTimeParseException | NoSuchElementException e) {
             System.out.println("Ошибка: " + e.getMessage());
         }
     }

@@ -18,7 +18,7 @@ public class AvgDurationFinder implements Function<List<SleepingSession>, SleepA
                 .average()
                 .orElse(0.0);
 
-        String formattedResult = String.format("%.2f", avgDuration);
-        return new SleepAnalysisResult("Максимальная продолжительность сна в минутах", formattedResult);
+        double roundedResult = (double) Math.round(avgDuration * 100) / 100;
+        return new SleepAnalysisResult("Средняя продолжительность сна в минутах", roundedResult);
     }
 }

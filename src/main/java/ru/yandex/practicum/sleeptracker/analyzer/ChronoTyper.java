@@ -7,6 +7,7 @@ import ru.yandex.practicum.sleeptracker.util.SleepAnalysisResult;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -20,6 +21,9 @@ public class ChronoTyper implements Function<List<SleepingSession>, SleepAnalysi
     @Override
     public SleepAnalysisResult apply(List<SleepingSession> sleepingSessions) {
 
+        if (sleepingSessions == null || sleepingSessions.isEmpty())
+            throw new NoSuchElementException("список сессий сна пуст");
+
         Map<UserType, Long> typeCounts = sleepingSessions.stream()
                 .filter(ChronoTyper::isNightSession)
                 .map(ChronoTyper::getUserType)
@@ -27,6 +31,9 @@ public class ChronoTyper implements Function<List<SleepingSession>, SleepAnalysi
                         type -> type,
                         Collectors.counting()
                 ));
+
+        if (typeCounts.isEmpty())
+            throw new NoSuchElementException("в списке сессий нет ночей со сном");
 
         Long maxCountChronoType = typeCounts.values().stream()
                 .max(Long::compareTo)
@@ -38,7 +45,6 @@ public class ChronoTyper implements Function<List<SleepingSession>, SleepAnalysi
                 .toList();
 
         UserType result = topListOfChronoType.size() > 1 ? UserType.DOVE : topListOfChronoType.getFirst();
-
         return new SleepAnalysisResult("Классификация пользователя по хронотипу", result.getName());
     }
 

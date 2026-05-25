@@ -3,9 +3,8 @@ package ru.yandex.practicum.sleeptracker.analyzer;
 import ru.yandex.practicum.sleeptracker.model.SleepingSession;
 import ru.yandex.practicum.sleeptracker.model.UserType;
 import ru.yandex.practicum.sleeptracker.util.SleepAnalysisResult;
+import ru.yandex.practicum.sleeptracker.util.SleepingSessionUtils;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +26,8 @@ public class ChronoTyper implements Function<List<SleepingSession>, SleepAnalysi
             throw new NoSuchElementException("список сессий сна пуст");
 
         Map<UserType, Long> typeCounts = sleepingSessions.stream()
-                .filter(ChronoTyper::isNightSession)
+                .filter(SleepingSessionUtils::isNightSession)
+                .filter(SleepingSessionUtils::isValidSession)
                 .map(ChronoTyper::getUserType)
                 .collect(Collectors.groupingBy(
                         type -> type,
@@ -69,19 +69,5 @@ public class ChronoTyper implements Function<List<SleepingSession>, SleepAnalysi
         }
 
         return UserType.DOVE;
-    }
-
-    private static boolean isNightSession(SleepingSession sleepingSession) {
-        LocalDateTime sleepStart = sleepingSession.getStart();
-        LocalDateTime sleepFinish = sleepingSession.getFinish();
-
-        LocalDate nightDate = sleepStart.toLocalTime().isAfter(LocalTime.NOON)
-                ? sleepStart.toLocalDate().plusDays(1)
-                : sleepStart.toLocalDate();
-
-        LocalDateTime nightStart = nightDate.atStartOfDay();
-        LocalDateTime nightFinish = nightDate.atTime(6, 0);
-
-        return sleepStart.isBefore(nightFinish) && sleepFinish.isAfter(nightStart);
     }
 }

@@ -336,6 +336,8 @@ public class SleepTrackerAppTest {
         ChronoTyper chronoTyper  = new ChronoTyper();
 
         inputData = List.of(
+                "28.09.25 07:00;28.09.25 08:00;BAD",
+                "28.09.25 22:30;28.09.25 23:30;BAD",
                 "29.09.25 21:50;30.09.25 05:30;GOOD",
                 "30.09.25 21:50;01.10.25 05:30;GOOD",
                 "01.10.25 21:15;02.10.25 05:30;GOOD",

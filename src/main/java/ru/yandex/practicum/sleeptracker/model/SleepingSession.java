@@ -39,12 +39,11 @@ public class SleepingSession {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         SleepingSession that = (SleepingSession) o;
-        return Objects.equals(start.toLocalDate(), that.start.toLocalDate())
-                && Objects.equals(finish.toLocalDate(), that.finish.toLocalDate());
+        return Objects.equals(start, that.start) && Objects.equals(finish, that.finish) && quality == that.quality;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(start.toLocalDate(), finish.toLocalDate());
+        return Objects.hash(start, finish, quality);
     }
 }

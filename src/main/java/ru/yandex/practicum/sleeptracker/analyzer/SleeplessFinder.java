@@ -26,34 +26,38 @@ public class SleeplessFinder implements Function<List<SleepingSession>, SleepAna
 
         if (sessions == null || sessions.isEmpty()) return 0;
 
-        LocalDate firstNight = sessions.getFirst().getStart().toLocalTime().isAfter(NOON)
-                ? sessions.getFirst().getStart().toLocalDate().plusDays(1)
-                : sessions.getFirst().getStart().toLocalDate();
-
-        LocalDate lastNight = sessions.getLast().getFinish().toLocalDate();
+        LocalDate firstNight = getNightDate(sessions.getFirst());
+        LocalDate lastNight = getNightDate(sessions.getLast());
 
         long period = lastNight.plusDays(1).toEpochDay() - firstNight.toEpochDay();
         return (int) period;
     }
 
     private static int getSleepNights(List<SleepingSession> sessions) {
-        /*
-        * В терминальной операции стрима собираем в коллекцию Set - это автоматически удаляет дубликаты
-        * ночей, возникающие в результате наличия нескольких сессий сна за одну ночь.
-        * Сессии сна считаются одинаковыми, если у них совпадает только дата начала сессии и ее конца.
-        * Реализовано за счет переопределения методов equals/hashCode в классе SleepingSession.
-        * */
+
         return sessions.stream()
                 .filter(SleeplessFinder::isSleepConditions)
-                .collect(Collectors.toSet()).size();
+                .map(SleeplessFinder::getNightDate)
+                .collect(Collectors.toSet())
+                .size();
     }
 
     private static boolean isSleepConditions(SleepingSession session) {
 
-        LocalDateTime start = session.getStart();
-        LocalDateTime finish = session.getFinish();
+        LocalDate nightDate = getNightDate(session);
 
-        if (finish.toLocalDate().isAfter(start.toLocalDate())) return true;
-        return start.toLocalTime().isBefore(NIGHT_FINISH);
+        LocalDateTime start = nightDate.atStartOfDay();
+        LocalDateTime finish = nightDate.atTime(NIGHT_FINISH);
+
+        return session.getStart().isBefore(finish) && session.getFinish().isAfter(start);
+    }
+
+    private static LocalDate getNightDate(SleepingSession session) {
+
+        LocalDateTime start = session.getStart();
+
+        return start.toLocalTime().isAfter(NOON)
+                ? start.toLocalDate().plusDays(1)
+                : start.toLocalDate();
     }
 }

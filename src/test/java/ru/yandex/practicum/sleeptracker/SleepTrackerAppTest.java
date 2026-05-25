@@ -200,7 +200,7 @@ public class SleepTrackerAppTest {
                 })
                 .toList();
 
-        assertEquals(16, sleeplessFinder.apply(modifiedSessions).getResult());
+        assertEquals(18, sleeplessFinder.apply(modifiedSessions).getResult());
     }
     /*
      * Бессонные ночи

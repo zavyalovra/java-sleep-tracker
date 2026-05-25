@@ -4,6 +4,8 @@ import ru.yandex.practicum.sleeptracker.model.SleepingSession;
 import ru.yandex.practicum.sleeptracker.model.UserType;
 import ru.yandex.practicum.sleeptracker.util.SleepAnalysisResult;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
@@ -70,15 +72,16 @@ public class ChronoTyper implements Function<List<SleepingSession>, SleepAnalysi
     }
 
     private static boolean isNightSession(SleepingSession sleepingSession) {
-        LocalTime sleepStart = sleepingSession.getStart().toLocalTime();
-        LocalTime sleepFinish = sleepingSession.getFinish().toLocalTime();
+        LocalDateTime sleepStart = sleepingSession.getStart();
+        LocalDateTime sleepFinish = sleepingSession.getFinish();
 
-        LocalTime dayStart = LocalTime.of(9, 0);
-        LocalTime dayFinish = LocalTime.of(22, 0);
+        LocalDate nightDate = sleepStart.toLocalTime().isAfter(LocalTime.NOON)
+                ? sleepStart.toLocalDate().plusDays(1)
+                : sleepStart.toLocalDate();
 
-        boolean sleepStartInDay = sleepStart.isAfter(dayStart) && sleepStart.isBefore(dayFinish);
-        boolean sleepFinishInDay = sleepFinish.isAfter(dayStart) && sleepFinish.isBefore(dayFinish);
+        LocalDateTime nightStart = nightDate.atStartOfDay();
+        LocalDateTime nightFinish = nightDate.atTime(6, 0);
 
-        return !(sleepStartInDay && sleepFinishInDay);
+        return sleepStart.isBefore(nightFinish) && sleepFinish.isAfter(nightStart);
     }
 }
